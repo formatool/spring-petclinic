@@ -1,0 +1,9 @@
+astra:
+  client-id: ${ASTRA_DB_CLIENT_ID}
+  client-secret: ${ASTRA_DB_CLIENT_SECRET}
+  secure-connect-bundle-path: ${ASTRA_DB_SECURE_BUNDLE:astra-creds.zip}
+  keyspace: ${ASTRA_DB_KEYSPACE:spring_petclinic}
+
+logging:
+  level:    
+    org.springframework.data.cassandra: TRACE
