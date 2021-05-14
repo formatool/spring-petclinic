@@ -20,19 +20,23 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.core.style.ToStringCreator;
-import org.springframework.samples.petclinic.model.Person;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.CassandraType;
+import org.springframework.data.cassandra.core.mapping.CassandraType.Name;
+import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
+import org.springframework.data.cassandra.core.mapping.Table;
 
 /**
  * Simple JavaBean domain object representing an owner.
@@ -42,25 +46,68 @@ import org.springframework.samples.petclinic.model.Person;
  * @author Sam Brannen
  * @author Michael Isvy
  */
-@Entity
-@Table(name = "owners")
-public class Owner extends Person {
 
-	@Column(name = "address")
+@Table("owners")
+public class Owner extends BaseEntity {
+
+	@PrimaryKeyColumn(value = "owner_id", type = PrimaryKeyType.PARTITIONED)
+	@Id
+	private UUID owner_id;
+
+	// TODO: Why ownerId not work?
+
+	@Column("first_name")
+	@NotEmpty
+	private String firstName;
+
+	@Column("last_name")
+	@NotEmpty
+	private String lastName;
+
+	@Column("address")
+	@CassandraType(type = Name.TEXT)
 	@NotEmpty
 	private String address;
 
-	@Column(name = "city")
+	@Column("city")
+	@CassandraType(type = Name.TEXT)
 	@NotEmpty
 	private String city;
 
-	@Column(name = "telephone")
+	@Column("telephone")
+	@CassandraType(type = Name.TEXT)
 	@NotEmpty
 	@Digits(fraction = 0, integer = 10)
 	private String telephone;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+	@Transient
 	private Set<Pet> pets;
+
+	// TODO: Pet's name on List of Owners. How?
+
+	public UUID getOwnerId() {
+		return owner_id;
+	}
+
+	public void setOwnerId(UUID ownerId) {
+		this.owner_id = ownerId;
+	}
+
+	public String getFirstName() {
+		return this.firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return this.lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
 	public String getAddress() {
 		return this.address;
@@ -138,11 +185,15 @@ public class Owner extends Person {
 		return null;
 	}
 
+	public boolean isNew() {
+		return this.owner_id == null;
+	}
+
 	@Override
 	public String toString() {
 		return new ToStringCreator(this)
 
-				.append("id", this.getId()).append("new", this.isNew()).append("lastName", this.getLastName())
+				.append("ownerId", this.getOwnerId()).append("new", this.isNew()).append("lastName", this.getLastName())
 				.append("firstName", this.getFirstName()).append("address", this.address).append("city", this.city)
 				.append("telephone", this.telephone).toString();
 	}

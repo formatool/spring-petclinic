@@ -16,12 +16,14 @@
 package org.springframework.samples.petclinic.visit;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
+import org.springframework.data.cassandra.core.mapping.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
@@ -31,26 +33,36 @@ import org.springframework.samples.petclinic.model.BaseEntity;
  * @author Ken Krebs
  * @author Dave Syer
  */
-@Entity
-@Table(name = "visits")
+@Table("visits_by_pets")
 public class Visit extends BaseEntity {
 
-	@Column(name = "visit_date")
+	@PrimaryKeyColumn(name = "visit_id", type = PrimaryKeyType.CLUSTERED)
+	private UUID visitId;
+
+	@Column("visit_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 
 	@NotEmpty
-	@Column(name = "description")
+	@Column("description")
 	private String description;
 
-	@Column(name = "pet_id")
-	private Integer petId;
+	@PrimaryKeyColumn(name = "pet_id", type = PrimaryKeyType.PARTITIONED)
+	private UUID petId;
 
 	/**
 	 * Creates a new instance of Visit for the current date
 	 */
 	public Visit() {
 		this.date = LocalDate.now();
+	}
+
+	public UUID getVisitId() {
+		return visitId;
+	}
+
+	public void setVisitId(UUID visitId) {
+		this.visitId = visitId;
 	}
 
 	public LocalDate getDate() {
@@ -69,12 +81,16 @@ public class Visit extends BaseEntity {
 		this.description = description;
 	}
 
-	public Integer getPetId() {
+	public UUID getPetId() {
 		return this.petId;
 	}
 
-	public void setPetId(Integer petId) {
+	public void setPetId(UUID petId) {
 		this.petId = petId;
+	}
+
+	public boolean isNew() {
+		return this.visitId == null;
 	}
 
 }

@@ -16,8 +16,11 @@
 package org.springframework.samples.petclinic.owner;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
+
+import com.datastax.oss.driver.api.core.uuid.Uuids;
 
 import org.springframework.samples.petclinic.visit.Visit;
 import org.springframework.samples.petclinic.visit.VisitRepository;
@@ -44,9 +47,12 @@ class VisitController {
 
 	private final PetRepository pets;
 
-	public VisitController(VisitRepository visits, PetRepository pets) {
+	private final OwnerRepository owners;
+
+	public VisitController(VisitRepository visits, PetRepository pets, OwnerRepository owners) {
 		this.visits = visits;
 		this.pets = pets;
+		this.owners = owners;
 	}
 
 	@InitBinder
@@ -62,9 +68,11 @@ class VisitController {
 	 * @return Pet
 	 */
 	@ModelAttribute("visit")
-	public Visit loadPetWithVisit(@PathVariable("petId") int petId, Map<String, Object> model) {
-		Pet pet = this.pets.findById(petId);
+	public Visit loadPetWithVisit(@PathVariable("ownerId") UUID ownerId, @PathVariable("petId") UUID petId,
+			Map<String, Object> model) {
+		Pet pet = this.pets.findById(new PetKey(petId, ownerId)).orElseThrow();
 		pet.setVisitsInternal(this.visits.findByPetId(petId));
+		pet.setOwner(owners.findById(ownerId).orElse(null));
 		model.put("pet", pet);
 		Visit visit = new Visit();
 		pet.addVisit(visit);
@@ -72,8 +80,8 @@ class VisitController {
 	}
 
 	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
-	@GetMapping("/owners/*/pets/{petId}/visits/new")
-	public String initNewVisitForm(@PathVariable("petId") int petId, Map<String, Object> model) {
+	@GetMapping("/owners/{ownerId}/pets/{petId}/visits/new")
+	public String initNewVisitForm(@PathVariable("petId") UUID petId, Map<String, Object> model) {
 		return "pets/createOrUpdateVisitForm";
 	}
 
@@ -84,6 +92,7 @@ class VisitController {
 			return "pets/createOrUpdateVisitForm";
 		}
 		else {
+			visit.setVisitId(Uuids.random());
 			this.visits.save(visit);
 			return "redirect:/owners/{ownerId}";
 		}

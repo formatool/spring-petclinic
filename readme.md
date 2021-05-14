@@ -1,16 +1,64 @@
-# Spring PetClinic using Cassandra DBaaS DataStax Astra [![Build Status](https://travis-ci.com/patajones/spring-petclinic.svg?branch=main)](https://travis-ci.com/patajones/spring-petclinic)
+# Spring PetClinic Cassandra/Astra Version [![Build Status](https://travis-ci.com/formatool/spring-petclinic.svg?branch=main)](https://travis-ci.com/formatool/spring-petclinic)
 
-[Spring PetClinic Sample Application](https://spring-petclinic.github.io/) using a multi-cloud DBaaS built on Apache Cassandra [Datastax Astra](https://astra.datastax.com/)
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/formatool/spring-petclinic) 
+
+[Spring PetClinic Sample Application](https://spring-petclinic.github.io/) Cassandra version using a multi-cloud DBaaS built on Apache Cassandra [Datastax Astra](https://astra.datastax.com/)
+
+This project was a fork of the original https://github.com/spring-projects/spring-petclinic for the purpose of demonstrating how to adapt an SQL application to use Cassandra NoSQL DB, with the least possible effort. The data model schema was inspired by the https://github.com/spring-petclinic/spring-petclinic-reactive project, presented in [Workshop FromSQL to NoSQL]( https://www.youtube.com/watch?v=elRWY8-tMbU)
+
+## Create your Astra instance
+
+Before execute that application, you must prepare the database and keyspace at Datastax Astra.
+
+`ASTRA` service is available at url [https://astra.datastax.com](https://dtsx.io/workshop). `ASTRA` is the simplest way to run Cassandra with zero operations at all - just push the button and get your cluster. **No credit card or any payment required**, $25.00 USD credit every month, roughly 5M writes, 30M reads, 40GB storage monthly - **sufficient to run small production workloads**.
+
+### ✅ Step 1. Register (if needed) and Sign In to Astra
+
+Register (if needed) and Sign In to Astra : You can use your `Github`, `Google` accounts or register with an `email`.
+
+Follow this [guide](https://docs.datastax.com/en/astra/docs/creating-your-astra-database.html) and use the values provided below, to set up a pay as you go database with a **FREE** $25 monthly credit.
+
+Use values:
+
+| Parameter | Value 
+|---|---|
+| Keyspace name | spring_petclinic |
+
+### ✅ Step 2 - Create petclinic NoSQL data model
+
+In the Summary screen for your database, select **_CQL Console_** from the top menu in the main window. This will take you to the CQL Console and automatically log you in.
+
+Execute the contents of the files [src/main/resources/db/cassandra/schema.sql](src/main/resources/db/cassandra/schema.sql) and [src/main/resources/db/cassandra/data.sql](src/main/resources/db/cassandra/data.sql). (*Copy and paste into your CQL Console*)
+
+
+### ✅ Step 3. Generate your token
+
+If you don't already have one follow the [instructions here](https://docs.datastax.com/en/astra/docs/manage-application-tokens.html#_create_application_token) to generate your new token. **Don't forget to download it once created because you will not be able to see it again** without generating a new one.
+
+### ✅ Step 4. Set your connection informations
+
+Execute the script [setup.sh](/setup.sh) and folow the instructions.
+
+After running the script, you will have filled the environments:
+
+```
+export ASTRA_DB_CLIENT_ID=<Client ID Value>
+export ASTRA_DB_CLIENT_SECRET=<Client Secret Value>
+```
+
+and you will have the Secure Connect Bundle in the file `astra-creds.zip`
 
 ## Understanding the Spring Petclinic application with a few diagrams
 <a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
 
 ## Running petclinic locally
+
+After preparing the database and its settings, you are ready to run the application locally.
+
 Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
 
-
 ```
-git clone https://github.com/spring-projects/spring-petclinic.git
+git clone --branch astra-version https://github.com/spring-projects/spring-petclinic.git
 cd spring-petclinic
 ./mvnw package
 java -jar target/*.jar
@@ -26,73 +74,15 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 ./mvnw spring-boot:run
 ```
 
-> NOTE: Windows users should set `git config core.autocrlf true` to avoid format assertions failing the build (use `--global` to set that flag globally).
-
-## In case you find a bug/suggested improvement for Spring Petclinic
-Our issue tracker is available here: https://github.com/spring-projects/spring-petclinic/issues
-
-
-## Database configuration
-
-In its default configuration, Petclinic uses an in-memory database (H2) which
-gets populated at startup with data. The h2 console is automatically exposed at `http://localhost:8080/h2-console`
-and it is possible to inspect the content of the database using the `jdbc:h2:mem:testdb` url.
- 
-A similar setup is provided for MySql in case a persistent database configuration is needed. Note that whenever the database type is changed, the app needs to be run with a different profile: `spring.profiles.active=mysql` for MySql.
-
-You could start MySql locally with whatever installer works for your OS, or with docker:
-
-```
-docker run -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:5.7.8
-```
-
-Further documentation is provided [here](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources/db/mysql/petclinic_db_setup_mysql.txt).
-
-## Working with Petclinic in your IDE
-
-### Prerequisites
-The following items should be installed in your system:
-* Java 8 or newer (full JDK not a JRE).
-* git command line tool (https://help.github.com/articles/set-up-git)
-* Your preferred IDE 
-  * Eclipse with the m2e plugin. Note: when m2e is available, there is an m2 icon in `Help -> About` dialog. If m2e is
-  not there, just follow the install process here: https://www.eclipse.org/m2e/
-  * [Spring Tools Suite](https://spring.io/tools) (STS)
-  * IntelliJ IDEA
-  * [VS Code](https://code.visualstudio.com)
-
-### Steps:
-
-1) On the command line
-    ```
-    git clone https://github.com/spring-projects/spring-petclinic.git
-    ```
-2) Inside Eclipse or STS
-    ```
-    File -> Import -> Maven -> Existing Maven project
-    ```
-
-    Then either build on the command line `./mvnw generate-resources` or using the Eclipse launcher (right click on project and `Run As -> Maven install`) to generate the css. Run the application main method by right clicking on it and choosing `Run As -> Java Application`.
-
-3) Inside IntelliJ IDEA
-    In the main menu, choose `File -> Open` and select the Petclinic [pom.xml](pom.xml). Click on the `Open` button.
-
-    CSS files are generated from the Maven build. You can either build them on the command line `./mvnw generate-resources` or right click on the `spring-petclinic` project then `Maven -> Generates sources and Update Folders`.
-
-    A run configuration named `PetClinicApplication` should have been created for you if you're using a recent Ultimate version. Otherwise, run the application by right clicking on the `PetClinicApplication` main class and choosing `Run 'PetClinicApplication'`.
-
-4) Navigate to Petclinic
-
-    Visit [http://localhost:8080](http://localhost:8080) in your browser.
-
-
 ## Looking for something in particular?
 
 |Spring Boot Configuration | Class or Java property files  |
 |--------------------------|---|
-|The Main Class | [PetClinicApplication](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
-|Properties Files | [application.properties](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/resources) |
-|Caching | [CacheConfiguration](https://github.com/spring-projects/spring-petclinic/blob/main/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
+|The Main Class | [PetClinicApplication](/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
+|Properties Files | [application.properties](/src/main/resources) |
+|Caching | [CacheConfiguration](/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
+|Astra Properties | [application-cassandra.yml](/src/main/resources/application-cassandra.yml) |
+|Cassandra Configuration | [application-cassandra.yml](/src/main/java/org/springframework/samples/petclinic/system/CassandraConfig.java) |
 
 ## Interesting Spring Petclinic branches and forks
 

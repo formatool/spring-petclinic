@@ -1,52 +1,29 @@
 package org.springframework.samples.petclinic.system;
 
-import java.nio.file.Paths;
-
-import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.CqlSessionBuilder;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Astra configuration required to connect to
+ * <a href="https://astra.datastax.com/">Datastax Astra DBaaS</a> The same property names
+ * as the <a href="https://github.com/datastax/astra-sdk-java">astra-sdk project</a> were
+ * used.
+ */
 @Configuration
 @ConfigurationProperties(prefix = "astra")
 public class AstraConfig {
-    
-    /** working with Astra. */
-    private String secureConnectBundlePath;
-    
-    /** setup Astra from an external file. */
-    private String keyspace;
-    
-    /** used as username for cqlSession. */
-    private String clientId;
-    
-    /** used as password for cqlSession. */
-    private String clientSecret;
 
-	/*
-	 * Use the standard Cassandra driver API to create a
-	 * com.datastax.oss.driver.api.core.CqlSession instance.
-	 */
-	@Bean
-	public CqlSession session() {
-		CqlSessionBuilder builder = CqlSession.builder();
+	/** working with Astra. */
+	private String secureConnectBundlePath;
 
-		if (null != this.getClientId() && !"".equals(this.getClientId())) {
-			builder = builder.withAuthCredentials(this.getClientId(), this.getClientSecret());
-		}
+	/** setup Astra from an external file. */
+	private String keyspace;
 
-		if (null != this.getSecureConnectBundlePath() && !"".equals(this.getSecureConnectBundlePath())) {
-			builder = builder.withCloudSecureConnectBundle(Paths.get(this.getSecureConnectBundlePath()));
-		}
+	/** used as username for cqlSession. */
+	private String clientId;
 
-		if (null != this.getKeyspace() && !"".equals(this.getKeyspace())) {
-			builder = builder.withKeyspace(this.getKeyspace());
-		}
-
-		return builder.build();
-	}
+	/** used as password for cqlSession. */
+	private String clientSecret;
 
 	public String getClientId() {
 		return clientId;

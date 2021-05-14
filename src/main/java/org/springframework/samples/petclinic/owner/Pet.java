@@ -23,18 +23,18 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.visit.Visit;
 
 /**
@@ -44,24 +44,52 @@ import org.springframework.samples.petclinic.visit.Visit;
  * @author Juergen Hoeller
  * @author Sam Brannen
  */
-@Entity
-@Table(name = "pets")
-public class Pet extends NamedEntity {
+@Table("pets_by_owners")
+public class Pet extends BaseEntity {
 
-	@Column(name = "birth_date")
+	@PrimaryKey
+	private PetKey key = new PetKey();
+
+	@Column("name")
+	private String name;
+
+	@Column("birth_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthDate;
 
-	@ManyToOne
-	@JoinColumn(name = "type_id")
-	private PetType type;
+	@Column("pet_type")
+	@NotEmpty
+	private String type;
 
-	@ManyToOne
-	@JoinColumn(name = "owner_id")
+	@Transient
 	private Owner owner;
 
 	@Transient
 	private Set<Visit> visits = new LinkedHashSet<>();
+
+	public UUID getId() {
+		return this.key.getPetId();
+	}
+
+	public void setId(UUID id) {
+		this.key.setPetId(id);
+	}
+
+	public void setOwnerId(UUID ownerId) {
+		this.key.setOwnerId(ownerId);
+	}
+
+	public UUID getOwnerId() {
+		return this.key.getOwnerId();
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
@@ -71,11 +99,11 @@ public class Pet extends NamedEntity {
 		return this.birthDate;
 	}
 
-	public PetType getType() {
+	public String getType() {
 		return this.type;
 	}
 
-	public void setType(PetType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
@@ -83,8 +111,9 @@ public class Pet extends NamedEntity {
 		return this.owner;
 	}
 
-	protected void setOwner(Owner owner) {
+	public void setOwner(Owner owner) {
 		this.owner = owner;
+		this.key.setOwnerId(owner.getOwnerId());
 	}
 
 	protected Set<Visit> getVisitsInternal() {
@@ -106,7 +135,11 @@ public class Pet extends NamedEntity {
 
 	public void addVisit(Visit visit) {
 		getVisitsInternal().add(visit);
-		visit.setPetId(this.getId());
+		visit.setPetId(this.key.getPetId());
+	}
+
+	public boolean isNew() {
+		return this.key.getPetId() == null;
 	}
 
 }

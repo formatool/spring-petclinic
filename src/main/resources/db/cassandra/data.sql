@@ -1,7 +1,7 @@
 USE spring_petclinic;
 
 INSERT INTO reference_lists(list_name, values) VALUES ('vet_specialty', {'radiology', 'dentistry', 'surgery'});
-INSERT INTO reference_lists(list_name, values) VALUES ('pet_type ', {'bird', 'cat', 'dog', 'lizard','hamster','snake'});
+INSERT INTO reference_lists(list_name, values) VALUES ('pet_type', {'bird', 'cat', 'dog', 'lizard','hamster','snake'});
 
 INSERT INTO vets (vet_id, first_name, last_name, specialties) VALUES (4482a345-9be1-4807-acc7-b138d7966287, 'James', 'Carter', {});
 INSERT INTO vets (vet_id, first_name, last_name, specialties) VALUES (4f297bac-4253-44a0-8f21-0528eb46bbd6, 'Helen', 'Leary', {'radiology'});

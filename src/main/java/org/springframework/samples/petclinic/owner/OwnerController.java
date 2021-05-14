@@ -15,6 +15,14 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.validation.Valid;
+
+import com.datastax.oss.driver.api.core.uuid.Uuids;
+
 import org.springframework.samples.petclinic.visit.VisitRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,10 +33,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.validation.Valid;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author Juergen Hoeller
@@ -43,10 +47,13 @@ class OwnerController {
 
 	private final OwnerRepository owners;
 
+	private PetRepository pets;
+
 	private VisitRepository visits;
 
-	public OwnerController(OwnerRepository clinicService, VisitRepository visits) {
+	public OwnerController(OwnerRepository clinicService, PetRepository pets, VisitRepository visits) {
 		this.owners = clinicService;
+		this.pets = pets;
 		this.visits = visits;
 	}
 
@@ -68,8 +75,9 @@ class OwnerController {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 		}
 		else {
+			owner.setOwnerId(Uuids.random());
 			this.owners.save(owner);
-			return "redirect:/owners/" + owner.getId();
+			return "redirect:/owners/" + owner.getOwnerId();
 		}
 	}
 
@@ -88,7 +96,8 @@ class OwnerController {
 		}
 
 		// find owners by last name
-		Collection<Owner> results = this.owners.findByLastName(owner.getLastName());
+		Collection<Owner> results = owner.getLastName().isEmpty() ? this.owners.findAll()
+				: this.owners.findByLastName(owner.getLastName());
 		if (results.isEmpty()) {
 			// no owners found
 			result.rejectValue("lastName", "notFound", "not found");
@@ -97,7 +106,7 @@ class OwnerController {
 		else if (results.size() == 1) {
 			// 1 owner found
 			owner = results.iterator().next();
-			return "redirect:/owners/" + owner.getId();
+			return "redirect:/owners/" + owner.getOwnerId();
 		}
 		else {
 			// multiple owners found
@@ -107,20 +116,20 @@ class OwnerController {
 	}
 
 	@GetMapping("/owners/{ownerId}/edit")
-	public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, Model model) {
-		Owner owner = this.owners.findById(ownerId);
+	public String initUpdateOwnerForm(@PathVariable("ownerId") UUID ownerId, Model model) {
+		Owner owner = this.owners.findById(ownerId).orElseThrow();
 		model.addAttribute(owner);
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping("/owners/{ownerId}/edit")
 	public String processUpdateOwnerForm(@Valid Owner owner, BindingResult result,
-			@PathVariable("ownerId") int ownerId) {
+			@PathVariable("ownerId") UUID ownerId) {
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 		}
 		else {
-			owner.setId(ownerId);
+			owner.setOwnerId(ownerId);
 			this.owners.save(owner);
 			return "redirect:/owners/{ownerId}";
 		}
@@ -132,9 +141,10 @@ class OwnerController {
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/owners/{ownerId}")
-	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
+	public ModelAndView showOwner(@PathVariable("ownerId") UUID ownerId) {
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
-		Owner owner = this.owners.findById(ownerId);
+		Owner owner = this.owners.findById(ownerId).orElseThrow();
+		owner.setPetsInternal(this.pets.findByKeyOwnerId(owner.getOwnerId()));
 		for (Pet pet : owner.getPets()) {
 			pet.setVisitsInternal(visits.findByPetId(pet.getId()));
 		}

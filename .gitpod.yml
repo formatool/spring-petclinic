@@ -1,0 +1,18 @@
+tasks:
+  - name: spring-petclinic
+    init: |
+      mvn clean package -DskipTests
+    command: |
+      . setup.sh
+      mvn spring-boot:run
+
+ports:
+  - port: 8080
+    onOpen: open-browser
+
+vscode:
+  extensions:
+    - pivotal.vscode-spring-boot
+    - vscjava.vscode-spring-boot-dashboard
+    - vscjava.vscode-maven
+    - redhat.java
