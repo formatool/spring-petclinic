@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.validation.constraints.NotEmpty;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.springframework.beans.support.MutableSortDefinition;
@@ -32,7 +31,7 @@ import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
-import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.model.Person;
 
 /**
  * Simple JavaBean domain object representing a veterinarian.
@@ -43,19 +42,11 @@ import org.springframework.samples.petclinic.model.BaseEntity;
  * @author Arjen Poutsma
  */
 @Table("vets")
-public class Vet extends BaseEntity {
+public class Vet extends Person {
 
 	@PrimaryKeyColumn(name = "vet_id", type = PrimaryKeyType.PARTITIONED)
 	@Id
 	private UUID vetId;
-
-	@Column("first_name")
-	@NotEmpty
-	private String firstName;
-
-	@Column("last_name")
-	@NotEmpty
-	private String lastName;
 
 	@Column("specialties")
 	private Set<String> specialties;
@@ -66,22 +57,6 @@ public class Vet extends BaseEntity {
 
 	public void setVetId(UUID vetId) {
 		this.vetId = vetId;
-	}
-
-	public String getFirstName() {
-		return this.firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return this.lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
 	}
 
 	protected Set<String> getSpecialtiesInternal() {

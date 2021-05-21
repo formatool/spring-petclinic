@@ -67,11 +67,11 @@ public class Pet extends BaseEntity {
 	@Transient
 	private Set<Visit> visits = new LinkedHashSet<>();
 
-	public UUID getId() {
+	public UUID getPetId() {
 		return this.key.getPetId();
 	}
 
-	public void setId(UUID id) {
+	public void setPetId(UUID id) {
 		this.key.setPetId(id);
 	}
 

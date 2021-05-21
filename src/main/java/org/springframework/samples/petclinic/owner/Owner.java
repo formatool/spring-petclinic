@@ -33,7 +33,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.CassandraType.Name;
-import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.model.Person;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
@@ -48,21 +48,13 @@ import org.springframework.data.cassandra.core.mapping.Table;
  */
 
 @Table("owners")
-public class Owner extends BaseEntity {
+public class Owner extends Person {
 
 	@PrimaryKeyColumn(value = "owner_id", type = PrimaryKeyType.PARTITIONED)
 	@Id
 	private UUID owner_id;
 
 	// TODO: Why ownerId not work?
-
-	@Column("first_name")
-	@NotEmpty
-	private String firstName;
-
-	@Column("last_name")
-	@NotEmpty
-	private String lastName;
 
 	@Column("address")
 	@CassandraType(type = Name.TEXT)
@@ -91,22 +83,6 @@ public class Owner extends BaseEntity {
 
 	public void setOwnerId(UUID ownerId) {
 		this.owner_id = ownerId;
-	}
-
-	public String getFirstName() {
-		return this.firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return this.lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
 	}
 
 	public String getAddress() {

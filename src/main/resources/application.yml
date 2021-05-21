@@ -1,6 +1,5 @@
 
 ---
 spring:
-  profiles: default
-  profiles.include: 
-  - cassandra
+  config.activate.on-profile: default
+  profiles.include: [cassandra]

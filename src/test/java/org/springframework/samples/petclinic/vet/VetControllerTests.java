@@ -24,6 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.Collections;
+import java.util.UUID;
+
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +34,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.samples.petclinic.reference.Reference;
+import org.springframework.samples.petclinic.reference.ReferenceRepository;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -40,42 +45,48 @@ import org.springframework.test.web.servlet.ResultActions;
 @WebMvcTest(VetController.class)
 class VetControllerTests {
 
-	// @Autowired
-	// private MockMvc mockMvc;
+	private static final UUID TEST_VET_ID1 = UUID.randomUUID();
 
-	// @MockBean
-	// private VetRepository vets;
+	private static final UUID TEST_VET_ID2 = UUID.randomUUID();
 
-	// @BeforeEach
-	// void setup() {
-	// Vet james = new Vet();
-	// james.setFirstName("James");
-	// james.setLastName("Carter");
-	// james.setId(1);
-	// Vet helen = new Vet();
-	// helen.setFirstName("Helen");
-	// helen.setLastName("Leary");
-	// helen.setId(2);
-	// Specialty radiology = new Specialty();
-	// radiology.setId(1);
-	// radiology.setName("radiology");
-	// helen.addSpecialty(radiology);
-	// given(this.vets.findAll()).willReturn(Lists.newArrayList(james, helen));
-	// }
+	@Autowired
+	private MockMvc mockMvc;
 
-	// @Test
-	// void testShowVetListHtml() throws Exception {
-	// mockMvc.perform(get("/vets.html")).andExpect(status().isOk()).andExpect(model().attributeExists("vets"))
-	// .andExpect(view().name("vets/vetList"));
-	// }
+	@MockBean
+	private VetRepository vets;
 
-	// @Test
-	// void testShowResourcesVetList() throws Exception {
-	// ResultActions actions =
-	// mockMvc.perform(get("/vets").accept(MediaType.APPLICATION_JSON))
-	// .andExpect(status().isOk());
-	// actions.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-	// .andExpect(jsonPath("$.vetList[0].id").value(1));
-	// }
+	@MockBean
+	private ReferenceRepository references;
+
+	@BeforeEach
+	void setup() {
+		Vet james = new Vet();
+		james.setFirstName("James");
+		james.setLastName("Carter");
+		james.setVetId(TEST_VET_ID1);
+		Vet helen = new Vet();
+		helen.setFirstName("Helen");
+		helen.setLastName("Leary");
+		helen.setVetId(TEST_VET_ID2);
+		Reference reference = new Reference();
+		reference.setListName("vet_specialty");
+		reference.setValues(Collections.singleton("radiology"));
+		helen.addSpecialty("radiology");
+		given(this.vets.findAll()).willReturn(Lists.newArrayList(james, helen));
+	}
+
+	@Test
+	void testShowVetListHtml() throws Exception {
+		mockMvc.perform(get("/vets.html")).andExpect(status().isOk()).andExpect(model().attributeExists("vets"))
+				.andExpect(view().name("vets/vetList"));
+	}
+
+	@Test
+	void testShowResourcesVetList() throws Exception {
+		ResultActions actions = mockMvc.perform(get("/vets").accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+		actions.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.vetList[0].vetId").value(TEST_VET_ID1.toString()));
+	}
 
 }

@@ -146,7 +146,7 @@ class OwnerController {
 		Owner owner = this.owners.findById(ownerId).orElseThrow();
 		owner.setPetsInternal(this.pets.findByKeyOwnerId(owner.getOwnerId()));
 		for (Pet pet : owner.getPets()) {
-			pet.setVisitsInternal(visits.findByPetId(pet.getId()));
+			pet.setVisitsInternal(visits.findByPetId(pet.getPetId()));
 		}
 		mav.addObject(owner);
 		return mav;

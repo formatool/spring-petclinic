@@ -20,22 +20,25 @@ import org.springframework.util.SerializationUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.UUID;
+
 /**
  * @author Dave Syer
  */
 class VetTests {
 
-	// @Test
-	// void testSerialization() {
-	// Vet vet = new Vet();
-	// vet.setFirstName("Zaphod");
-	// vet.setLastName("Beeblebrox");
-	// vet.setId(123);
-	// Vet other = (Vet)
-	// SerializationUtils.deserialize(SerializationUtils.serialize(vet));
-	// assertThat(other.getFirstName()).isEqualTo(vet.getFirstName());
-	// assertThat(other.getLastName()).isEqualTo(vet.getLastName());
-	// assertThat(other.getId()).isEqualTo(vet.getId());
-	// }
+	private static final UUID TEST_VET_ID = UUID.randomUUID();
+
+	@Test
+	void testSerialization() {
+		Vet vet = new Vet();
+		vet.setFirstName("Zaphod");
+		vet.setLastName("Beeblebrox");
+		vet.setVetId(TEST_VET_ID);
+		Vet other = (Vet) SerializationUtils.deserialize(SerializationUtils.serialize(vet));
+		assertThat(other.getFirstName()).isEqualTo(vet.getFirstName());
+		assertThat(other.getLastName()).isEqualTo(vet.getLastName());
+		assertThat(other.getVetId()).isEqualTo(vet.getVetId());
+	}
 
 }

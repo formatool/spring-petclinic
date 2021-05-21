@@ -103,7 +103,7 @@ class PetController {
 			return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 		}
 		else {
-			pet.setId(Uuids.random());
+			pet.setPetId(Uuids.random());
 			this.pets.save(pet);
 			return "redirect:/owners/{ownerId}";
 		}
