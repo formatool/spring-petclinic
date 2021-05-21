@@ -1,3 +1,7 @@
+if [ -f ./astra-creds.zip ]; then
+  echo "🚀 The file astra-creds.zip has already been downloaded. 
+  To reconfigure, delete the file and run the setup script again."
+else
 echo "🚀 What is the 'Database Administrator' token information?
 Go to https://astra.datastax.com and register or login
 Select your database from the left panel from the Astra UI
@@ -40,3 +44,4 @@ gp env ASTRA_SECURE_BUNDLE_URL=${FIRST_DB_SECURE_BUNDLE_URL} &>/dev/null
 # Download the secure connect bundle
 echo "Downloading secure bundle astra-creds.zip"
 curl -s -L $(echo $FIRST_DB_SECURE_BUNDLE_URL | sed "s/\"//g") -o astra-creds.zip
+fi
