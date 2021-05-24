@@ -2,9 +2,17 @@
 
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/formatool/spring-petclinic) 
 
-[Spring PetClinic Sample Application](https://spring-petclinic.github.io/) Cassandra version using a multi-cloud DBaaS built on Apache Cassandra [Datastax Astra](https://astra.datastax.com/)
+![en-us](https://img.shields.io/badge/lang-en--US-blue.svg)
 
-This project was a fork of the original https://github.com/spring-projects/spring-petclinic for the purpose of demonstrating how to adapt an SQL application to use Cassandra NoSQL DB, with the least possible effort. The data model schema was inspired by the https://github.com/spring-petclinic/spring-petclinic-reactive project, presented in [Workshop FromSQL to NoSQL]( https://www.youtube.com/watch?v=elRWY8-tMbU)
+[Spring PetClinic Sample Application](https://spring-petclinic.github.io/) Cassandra version using a multi-cloud DBaaS built on Apache Cassandra [Datastax Astra](https://astra.datastax.com/). 
+
+This project was a fork of the original https://github.com/spring-projects/spring-petclinic for the purpose of demonstrating how to adapt an SQL application to use Cassandra NoSQL DB, with the least possible effort. The data model schema was inspired by the https://github.com/spring-petclinic/spring-petclinic-reactive project, presented in [Workshop FromSQL to NoSQL]( https://www.youtube.com/watch?v=elRWY8-tMbU).
+
+![pt-br](https://img.shields.io/badge/lang-pt--BR-yellow.svg) 
+
+Versão Cassandra do Spring PetClinic Sample Application usando o Datastax Astra, um DBaaS multi-cloud feito com Apache Cassandra.
+
+Este projeto foi bifurcado do original https://github.com/spring-projects/spring-petclinic com o objetivo de demonstrar como adaptar uma aplicação SQL para usar o banco Cassandra NoSQL, com o mínimo de esforço possível. O esquema de modelo de dados foi inspirado no projeto https://github.com/spring-petclinic/spring-petclinic-reactive, apresentado no [Workshop From SQL to NoSQL]( https://www.youtube.com/watch?v=elRWY8-tMbU).
 
 ## Create your Astra instance
 
