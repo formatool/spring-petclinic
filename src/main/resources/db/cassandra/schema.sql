@@ -41,7 +41,9 @@ CREATE TABLE owners (
   telephone  text,
   PRIMARY KEY ((owner_id))
 );
-CREATE INDEX owners_last_name ON owners (last_name);
+CREATE CUSTOM INDEX owners_last_name ON owners (last_name)
+USING 'StorageAttachedIndex' 
+WITH OPTIONS = {'case_sensitive': 'false', 'normalize': 'true', 'ascii': 'true'};
 
 CREATE TABLE pets_by_owners (
   pet_id     uuid,
