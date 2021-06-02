@@ -111,7 +111,7 @@ class OwnerController {
 		else {
 			// multiple owners found
 			model.put("selections", results);
-			results.stream().parallel().forEach(o -> o.setPetsInternal(this.pets.findByKeyOwnerId(o.getOwnerId())));			
+			results.stream().parallel().forEach(o -> o.setPetsInternal(this.pets.findByKeyOwnerId(o.getOwnerId())));
 			return "owners/ownersList";
 		}
 	}
