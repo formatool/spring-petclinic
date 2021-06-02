@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
@@ -34,10 +33,10 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.CassandraType.Name;
-import org.springframework.samples.petclinic.model.Person;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.samples.petclinic.model.Person;
 
 /**
  * Simple JavaBean domain object representing an owner.
@@ -78,8 +77,6 @@ public class Owner extends Person {
 
 	@Transient
 	private Set<Pet> pets;
-
-	// TODO: Pet's name on List of Owners. How?
 
 	public UUID getOwnerId() {
 		return owner_id;
