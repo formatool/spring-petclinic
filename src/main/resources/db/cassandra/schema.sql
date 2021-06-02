@@ -39,6 +39,7 @@ CREATE TABLE owners (
   address    text,
   city       text,
   telephone  text,
+  pets_name  set<text>,
   PRIMARY KEY ((owner_id))
 );
 CREATE CUSTOM INDEX owners_last_name ON owners (last_name)

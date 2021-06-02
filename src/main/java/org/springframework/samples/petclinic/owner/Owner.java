@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
@@ -72,6 +73,9 @@ public class Owner extends Person {
 	@Digits(fraction = 0, integer = 10)
 	private String telephone;
 
+	@Column("pets_name")
+	private Set<String> pets_name;
+
 	@Transient
 	private Set<Pet> pets;
 
@@ -107,6 +111,13 @@ public class Owner extends Person {
 
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+
+	public Set<String> getPets_name() {
+		if (this.pets_name == null) {
+			this.pets_name = new HashSet<>();
+		}
+		return pets_name;
 	}
 
 	protected Set<Pet> getPetsInternal() {

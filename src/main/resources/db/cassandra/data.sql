@@ -16,16 +16,16 @@ INSERT INTO vets_by_specialties (specialty, vet_id, first_name, last_name) VALUE
 INSERT INTO vets_by_specialties (specialty, vet_id, first_name, last_name) VALUES ('surgery', 4eb28c1e-d228-4f35-9a08-48b0916b5a34, 'Rafael', 'Ortega');
 INSERT INTO vets_by_specialties (specialty, vet_id, first_name, last_name) VALUES ('radiology', f629c4d6-9b2c-4ca3-b975-b275496ddd86, 'Henry', 'Stevens');
 
-INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone) VALUES (81e34527-7527-4650-b98a-b346558c3959, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023');
-INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone) VALUES (76000447-637f-4fde-94dc-659f6e0b7286, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749');
-INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone) VALUES (48af98dd-bf7c-44ba-bae1-3ebf2fb0809e, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763');
-INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone) VALUES (436ac053-7a04-446e-9578-0bb895737dd6, 'Harold', 'Davis', '563 Friendly St.', 'Windsor', '6085553198');
-INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone) VALUES (72e36650-cf83-4fb2-a2ec-6a50ba7342bf, 'Peter', 'McTavish', '2387 S. Fair Way', 'Madison', '6085552765');
-INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone) VALUES (0dfeb2b2-2452-417f-b82b-1fb21394ef94, 'Jean', 'Coleman', '105 N. Lake St.', 'Monona', '6085552654');
-INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone) VALUES (60705b67-2ae1-4dae-88e6-3c3ae0ce7e98, 'Jeff', 'Black', '1450 Oak Blvd.', 'Monona', '6085555387');
-INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone) VALUES (1f0fe70d-506d-4196-a9e4-ab4c0cca3574, 'Maria', 'Escobito', '345 Maple St.', 'Madison', '6085557683');
-INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone) VALUES (b499d467-7082-4657-ae80-fcb8e0d2b717, 'David', 'Schroeder', '2749 Blackhawk Trail', 'Madison', '6085559435');
-INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone) VALUES (dfcea739-0ad2-43ce-809f-1bad3db7cfe0, 'Carlos', 'Estaban', '2335 Independence La.', 'Waunakee', '6085555487');
+INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone, pets_name) VALUES (81e34527-7527-4650-b98a-b346558c3959, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023', {'Leo'});
+INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone, pets_name) VALUES (76000447-637f-4fde-94dc-659f6e0b7286, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749', {'Basil'});
+INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone, pets_name) VALUES (48af98dd-bf7c-44ba-bae1-3ebf2fb0809e, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763', {'Jewel','Rosy'});
+INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone, pets_name) VALUES (436ac053-7a04-446e-9578-0bb895737dd6, 'Harold', 'Davis', '563 Friendly St.', 'Windsor', '6085553198', {'Iggy'});
+INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone, pets_name) VALUES (72e36650-cf83-4fb2-a2ec-6a50ba7342bf, 'Peter', 'McTavish', '2387 S. Fair Way', 'Madison', '6085552765', {'George'});
+INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone, pets_name) VALUES (0dfeb2b2-2452-417f-b82b-1fb21394ef94, 'Jean', 'Coleman', '105 N. Lake St.', 'Monona', '6085552654', {'Max', 'Samantha'});
+INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone, pets_name) VALUES (60705b67-2ae1-4dae-88e6-3c3ae0ce7e98, 'Jeff', 'Black', '1450 Oak Blvd.', 'Monona', '6085555387', {'Lucky'});
+INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone, pets_name) VALUES (1f0fe70d-506d-4196-a9e4-ab4c0cca3574, 'Maria', 'Escobito', '345 Maple St.', 'Madison', '6085557683', {'Mulligan'});
+INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone, pets_name) VALUES (b499d467-7082-4657-ae80-fcb8e0d2b717, 'David', 'Schroeder', '2749 Blackhawk Trail', 'Madison', '6085559435', {'Freddy'});
+INSERT INTO owners (owner_id, first_name, last_name, address, city, telephone, pets_name) VALUES (dfcea739-0ad2-43ce-809f-1bad3db7cfe0, 'Carlos', 'Estaban', '2335 Independence La.', 'Waunakee', '6085555487', {'Lucky', 'Sly'});
 
 INSERT INTO pets_by_owners (pet_id, name, birth_date, pet_type, owner_id) VALUES (5c62751b-babc-40f5-8d0f-cd09c67e786e, 'Leo', '2010-09-07', 'cat', 81e34527-7527-4650-b98a-b346558c3959);
 INSERT INTO pets_by_owners (pet_id, name, birth_date, pet_type, owner_id) VALUES (d7062d03-0a73-404b-883a-0e40251cd963, 'Basil', '2012-08-06', 'hamster', 76000447-637f-4fde-94dc-659f6e0b7286);

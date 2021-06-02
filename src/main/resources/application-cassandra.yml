@@ -6,4 +6,4 @@ astra:
 
 logging:
   level:    
-    org.springframework.data.cassandra: TRACE
+    org.springframework.data.cassandra.core.cql.CqlTemplate: DEBUG

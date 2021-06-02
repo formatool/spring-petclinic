@@ -15,13 +15,34 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.*;
+
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.uuid.Uuids;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.querybuilder.update.Update;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.cassandra.core.CassandraOperations;
+import org.springframework.data.cassandra.core.cql.CachedPreparedStatementCreator;
+import org.springframework.data.cassandra.core.cql.PreparedStatementBinder;
+import org.springframework.data.cassandra.core.cql.PreparedStatementCreator;
+import org.springframework.data.cassandra.core.cql.SimplePreparedStatementCreator;
+import org.springframework.data.cassandra.core.mapping.event.AbstractCassandraEventListener;
+import org.springframework.data.cassandra.core.mapping.event.AfterSaveEvent;
 
 import org.springframework.samples.petclinic.visit.VisitRepository;
 import org.springframework.stereotype.Controller;
@@ -41,7 +62,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Michael Isvy
  */
 @Controller
-class OwnerController {
+class OwnerController extends AbstractCassandraEventListener<Pet> {
 
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
 
@@ -51,10 +72,14 @@ class OwnerController {
 
 	private VisitRepository visits;
 
-	public OwnerController(OwnerRepository clinicService, PetRepository pets, VisitRepository visits) {
+	private CassandraOperations cassandraTemplate;
+
+	public OwnerController(OwnerRepository clinicService, PetRepository pets, VisitRepository visits,
+			CassandraOperations cassandraTemplate) {
 		this.owners = clinicService;
 		this.pets = pets;
 		this.visits = visits;
+		this.cassandraTemplate = cassandraTemplate;
 	}
 
 	@InitBinder
@@ -73,8 +98,7 @@ class OwnerController {
 	public String processCreationForm(@Valid Owner owner, BindingResult result) {
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
-		}
-		else {
+		} else {
 			owner.setOwnerId(Uuids.random());
 			this.owners.save(owner);
 			return "redirect:/owners/" + owner.getOwnerId();
@@ -102,16 +126,13 @@ class OwnerController {
 			// no owners found
 			result.rejectValue("lastName", "notFound", "not found");
 			return "owners/findOwners";
-		}
-		else if (results.size() == 1) {
+		} else if (results.size() == 1) {
 			// 1 owner found
 			owner = results.iterator().next();
 			return "redirect:/owners/" + owner.getOwnerId();
-		}
-		else {
+		} else {
 			// multiple owners found
 			model.put("selections", results);
-			results.stream().parallel().forEach(o -> o.setPetsInternal(this.pets.findByKeyOwnerId(o.getOwnerId())));
 			return "owners/ownersList";
 		}
 	}
@@ -128,8 +149,7 @@ class OwnerController {
 			@PathVariable("ownerId") UUID ownerId) {
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
-		}
-		else {
+		} else {
 			owner.setOwnerId(ownerId);
 			this.owners.save(owner);
 			return "redirect:/owners/{ownerId}";
@@ -138,6 +158,7 @@ class OwnerController {
 
 	/**
 	 * Custom handler for displaying an owner.
+	 * 
 	 * @param ownerId the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
@@ -151,6 +172,24 @@ class OwnerController {
 		}
 		mav.addObject(owner);
 		return mav;
+	}
+
+	/**
+	 * Change Pet's name list on Owner entity
+	 *
+	 */
+	@Override
+	public void onAfterSave(AfterSaveEvent<Pet> event) {
+		UUID owner_id = event.getSource().getOwnerId();
+		this.owners.findById(owner_id).ifPresent(owner -> {
+			Set<String> pets_name = this.pets.findByKeyOwnerId(owner_id)//
+					.stream().map(p -> p.getName())//
+					.collect(Collectors.toSet());
+			cassandraTemplate.getCqlOperations().execute(//
+					update("owners")//
+							.setColumn("pets_name", literal(pets_name)).whereColumn("owner_id")
+							.isEqualTo(literal(owner_id)).build());
+		});
 	}
 
 }
