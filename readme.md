@@ -1,10 +1,12 @@
-# Spring PetClinic Cassandra/Astra Version [![Build Status](https://travis-ci.com/formatool/spring-petclinic.svg?branch=main)](https://travis-ci.com/formatool/spring-petclinic)
+# Spring PetClinic Cassandra/Astra Version ![en-us](https://img.shields.io/badge/lang-en--US-blue.svg) [![Build Status](https://travis-ci.com/formatool/spring-petclinic.svg?branch=main)](https://travis-ci.com/formatool/spring-petclinic)
 
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/formatool/spring-petclinic) 
 
-[Spring PetClinic Sample Application](https://spring-petclinic.github.io/) Cassandra version using a multi-cloud DBaaS built on Apache Cassandra [Datastax Astra](https://astra.datastax.com/)
+_Leia em outro idioma:_ [![pt-BR](doc/br.png)](readme.pt-br.md)
 
-This project was a fork of the original https://github.com/spring-projects/spring-petclinic for the purpose of demonstrating how to adapt an SQL application to use Cassandra NoSQL DB, with the least possible effort. The data model schema was inspired by the https://github.com/spring-petclinic/spring-petclinic-reactive project, presented in [Workshop FromSQL to NoSQL]( https://www.youtube.com/watch?v=elRWY8-tMbU)
+[Spring PetClinic Sample Application](https://spring-petclinic.github.io/) Cassandra version using a multi-cloud DBaaS built on Apache Cassandra [Datastax Astra](https://astra.datastax.com/). 
+
+This project was a fork of the original https://github.com/spring-projects/spring-petclinic for the purpose of demonstrating how to adapt an SQL application to use Cassandra NoSQL DB, with the least possible effort. The data model schema was inspired by the https://github.com/spring-petclinic/spring-petclinic-reactive project, presented in [Workshop FromSQL to NoSQL]( https://www.youtube.com/watch?v=elRWY8-tMbU).
 
 ## Create your Astra instance
 
@@ -37,7 +39,7 @@ If you don't already have one follow the [instructions here](https://docs.datast
 
 ### ✅ Step 4. Set your connection informations
 
-Execute the script [setup.sh](/setup.sh) and folow the instructions.
+Execute the script [setup.sh](/setup.sh) and folow the instructions. In gitpod this script will run automatically.
 
 After running the script, you will have filled the environments:
 
@@ -58,7 +60,7 @@ After preparing the database and its settings, you are ready to run the applicat
 Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
 
 ```
-git clone --branch astra-version https://github.com/spring-projects/spring-petclinic.git
+git clone https://github.com/spring-projects/spring-petclinic.git
 cd spring-petclinic
 ./mvnw package
 java -jar target/*.jar
@@ -83,33 +85,6 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 |Caching | [CacheConfiguration](/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
 |Astra Properties | [application-cassandra.yml](/src/main/resources/application-cassandra.yml) |
 |Cassandra Configuration | [application-cassandra.yml](/src/main/java/org/springframework/samples/petclinic/system/CassandraConfig.java) |
-
-## Interesting Spring Petclinic branches and forks
-
-The Spring Petclinic "main" branch in the [spring-projects](https://github.com/spring-projects/spring-petclinic)
-GitHub org is the "canonical" implementation, currently based on Spring Boot and Thymeleaf. There are
-[quite a few forks](https://spring-petclinic.github.io/docs/forks.html) in a special GitHub org
-[spring-petclinic](https://github.com/spring-petclinic). If you have a special interest in a different technology stack
-that could be used to implement the Pet Clinic then please join the community there.
-
-
-## Interaction with other open source projects
-
-One of the best parts about working on the Spring Petclinic application is that we have the opportunity to work in direct contact with many Open Source projects. We found some bugs/suggested improvements on various topics such as Spring, Spring Data, Bean Validation and even Eclipse! In many cases, they've been fixed/implemented in just a few days.
-Here is a list of them:
-
-| Name | Issue |
-|------|-------|
-| Spring JDBC: simplify usage of NamedParameterJdbcTemplate | [SPR-10256](https://jira.springsource.org/browse/SPR-10256) and [SPR-10257](https://jira.springsource.org/browse/SPR-10257) |
-| Bean Validation / Hibernate Validator: simplify Maven dependencies and backward compatibility |[HV-790](https://hibernate.atlassian.net/browse/HV-790) and [HV-792](https://hibernate.atlassian.net/browse/HV-792) |
-| Spring Data: provide more flexibility when working with JPQL queries | [DATAJPA-292](https://jira.springsource.org/browse/DATAJPA-292) |
-
-
-# Contributing
-
-The [issue tracker](https://github.com/spring-projects/spring-petclinic/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
-
-For pull requests, editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <https://editorconfig.org>. If you have not previously done so, please fill out and submit the [Contributor License Agreement](https://cla.pivotal.io/sign/spring).
 
 # License
 
