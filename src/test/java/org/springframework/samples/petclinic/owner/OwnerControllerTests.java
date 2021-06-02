@@ -41,6 +41,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.samples.petclinic.visit.Visit;
 import org.springframework.samples.petclinic.visit.VisitRepository;
 import org.springframework.test.web.servlet.MockMvc;
@@ -54,6 +55,9 @@ import org.springframework.test.web.servlet.MockMvc;
 class OwnerControllerTests {
 
 	private static final UUID TEST_OWNER_ID = UUID.randomUUID();
+
+	@MockBean
+	private CassandraOperations cassandraOps;
 
 	@Autowired
 	private MockMvc mockMvc;
