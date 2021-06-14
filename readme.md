@@ -76,6 +76,14 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 ./mvnw spring-boot:run
 ```
 
+## Petclinic Workflow
+
+![Workflow](doc/astra-petclinic-diagrams-Workflow.png)
+
+## Data Model Migrate - SQL to CQL
+
+![Modelagem](doc/astra-petclinic-diagrams-SQL2CQL.png)
+
 ## Looking for something in particular?
 
 |Spring Boot Configuration | Class or Java property files  |
