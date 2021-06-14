@@ -8,6 +8,18 @@ _Leia em outro idioma:_ [![pt-BR](doc/br.png)](readme.pt-br.md)
 
 This project was a fork of the original https://github.com/spring-projects/spring-petclinic for the purpose of demonstrating how to adapt an SQL application to use Cassandra NoSQL DB, with the least possible effort. The data model schema was inspired by the https://github.com/spring-petclinic/spring-petclinic-reactive project, presented in [Workshop FromSQL to NoSQL]( https://www.youtube.com/watch?v=elRWY8-tMbU).
 
+The application's architecture had only one change: The repositories interfaces, before extended from `org.springframework.data.repository.Repository`, were changed to extend from `org.springframework.data.cassandra.repository.CassandraRepository`, taking advantage of the project [Spring Data for Apache Cassandra](https://spring.io/projects/spring-data-cassandra)
+
+## Updates on Data Model
+
+### Petclinic Workflow
+
+![Workflow](doc/astra-petclinic-diagrams-Workflow.png)
+
+### Migrate - SQL to CQL
+
+![Modelagem](doc/astra-petclinic-diagrams-SQL2CQL.png)
+
 ## Create your Astra instance
 
 Before execute that application, you must prepare the database and keyspace at Datastax Astra.
@@ -75,14 +87,6 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 ```
 ./mvnw spring-boot:run
 ```
-
-## Petclinic Workflow
-
-![Workflow](doc/astra-petclinic-diagrams-Workflow.png)
-
-## Data Model Migrate - SQL to CQL
-
-![Modelagem](doc/astra-petclinic-diagrams-SQL2CQL.png)
 
 ## Looking for something in particular?
 

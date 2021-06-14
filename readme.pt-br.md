@@ -6,7 +6,25 @@ _Read this in other languages:_ [![en-US](doc/us.png)](readme.md)
 
 Versão Cassandra do Spring PetClinic Sample Application usando o Datastax Astra, um DBaaS multi-cloud feito com Apache Cassandra.
 
-Este projeto é um _fork_ do original https://github.com/spring-projects/spring-petclinic com o objetivo de demonstrar como adaptar uma aplicação SQL para usar o banco Cassandra NoSQL, com o mínimo de esforço possível. O esquema de modelo de dados foi inspirado no projeto https://github.com/spring-petclinic/spring-petclinic-reactive, apresentado no [Workshop From SQL to NoSQL]( https://www.youtube.com/watch?v=elRWY8-tMbU).
+Este projeto é um _fork_ do original https://github.com/spring-projects/spring-petclinic com o objetivo de demonstrar como adaptar uma aplicação SQL para usar o banco Cassandra NoSQL, com o mínimo de esforço possível. O esquema de modelo de dados foi inspirado no projeto https://github.com/spring-petclinic/spring-petclinic-reactive, apresentado no [Workshop From SQL to NoSQL](https://www.youtube.com/watch?v=elRWY8-tMbU).
+
+A arquitetura da aplicação teve apenas uma alteração: As interfaces _repositories_, antes extendidas de `org.springframework.data.repository.Repository`, foram alteradas para extender de `org.springframework.data.cassandra.repository.CassandraRepository`, aproveitando as implementações já criadas do projeto [Spring Data for Apache Cassandra](https://spring.io/projects/spring-data-cassandra)
+
+![Diff Owner Repository](doc/diffOwnerRepository.png)
+
+## Alterações no Modelo de Dados
+
+Um modelo SQL tem algumas diferenças para um modelo CQL. Para realizar essa remodelagem, é importante entender quais são as consultas necessárias na aplicação. Para isso mapeamos o seu Fluxo de trabalho:
+
+### Workflow do Petclinic
+
+![Workflow](doc/astra-petclinic-diagrams-Workflow.png)
+
+### Modelagem SQL para CQL
+
+Com o Worflow em mãos, podemos realizar a modelagem que da um suporte às consultas realizadas na aplicação:
+
+![Modelagem](doc/astra-petclinic-diagrams-SQL2CQL.png)
 
 ## Crie sua intância Astra
 
@@ -74,14 +92,6 @@ Ou você pode executar diretamente do Maven usando o plugin Spring Boot Maven. F
 ```
 ./mvnw spring-boot:run
 ```
-
-## Workflow do Petclinic
-
-![Workflow](doc/astra-petclinic-diagrams-Workflow.png)
-
-## Modelagem SQL para CQL
-
-![Modelagem](doc/astra-petclinic-diagrams-SQL2CQL.png)
 
 ## Procurando algo em particular?
 
