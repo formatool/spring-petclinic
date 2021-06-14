@@ -75,6 +75,14 @@ Ou você pode executar diretamente do Maven usando o plugin Spring Boot Maven. F
 ./mvnw spring-boot:run
 ```
 
+## Workflow do Petclinic
+
+![Workflow](doc/astra-petclinic-diagrams-Workflow.png)
+
+## Modelagem SQL para CQL
+
+![Modelagem](doc/astra-petclinic-diagrams-SQL2CQL.png)
+
 ## Procurando algo em particular?
 
 |Spring Boot Configuration | Class or Java property files  |
